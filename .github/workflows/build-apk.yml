@@ -1,5 +1,5 @@
 # Builds Omnisave's APK on every push — no Android Studio needed on your laptop.
-# Get the file: github.com/<you>/<repo> → Actions → latest run → app-debug (download .zip).
+# Get the file: README's /releases/latest/download/app-debug.apk link (repo must be public).
 name: build-apk
 on: push
 jobs:
@@ -9,6 +9,10 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
         with: { distribution: temurin, java-version: "17" }
+      - name: Accept Android SDK licenses (runners ship unaccepted)
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
+      - name: Install Android platform + build tools
+        run: "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-34" "build-tools;34.0.0" > /dev/null
       - uses: gradle/actions/setup-gradle@v3
         with: { gradle-version: "8.7" }
       - name: Build debug APK
@@ -19,7 +23,7 @@ jobs:
           name: app-debug
           path: android/app/build/outputs/apk/debug/app-debug.apk
       - name: Publish direct-download release
-        # one stable link, always newest build: /releases/latest/download/omnisave.apk
+        # one stable link, always newest build: /releases/latest/download/app-debug.apk
         uses: softprops/action-gh-release@v2
         with:
           tag_name: latest
