@@ -1,0 +1,29 @@
+# Builds Omnisave's APK on every push — no Android Studio needed on your laptop.
+# Get the file: github.com/<you>/<repo> → Actions → latest run → app-debug (download .zip).
+name: build-apk
+on: push
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: "17" }
+      - uses: gradle/actions/setup-gradle@v3
+        with: { gradle-version: "8.7" }
+      - name: Build debug APK
+        working-directory: android
+        run: gradle assembleDebug --no-daemon
+      - uses: actions/upload-artifact@v4
+        with:
+          name: app-debug
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+      - name: Publish direct-download release
+        # one stable link, always newest build: /releases/latest/download/omnisave.apk
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          name: Omnisave (latest build)
+          files: android/app/build/outputs/apk/debug/app-debug.apk
+          overwrite_files: true
+          make_latest: true

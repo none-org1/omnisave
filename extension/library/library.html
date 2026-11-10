@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Omnisave — Library</title>
+  <link rel="stylesheet" href="library.css"/>
+</head>
+<body>
+  <div id="viewLib">
+    <header>
+      <span class="logo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 3.5h10a1 1 0 0 1 1 1v15.2a.7.7 0 0 1-1.1.6L12 16.6l-4.9 3.7A.7.7 0 0 1 6 19.7V4.5a1 1 0 0 1 1-1z" fill="#fff"/></svg></span>
+      <h1>Omnisave</h1>
+      <span id="count" class="sub"></span>
+      <button id="btnSettings" class="gear" aria-label="Open settings"><svg viewBox="0 0 24 24"><path d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm8.4 5.6 1.5 1.2c.4.3.5.8.3 1.2l-1.6 2.8c-.3.4-.7.6-1.1.4l-1.8-.7a8 8 0 0 1-1.7 1l-.3 1.9c0 .5-.4.8-.9.8h-3.2a.8.8 0 0 1-.8-.8l-.4-1.9a8 8 0 0 1-1.7-1l-1.8.7c-.4.2-.9 0-1.1-.4l-1.6-2.8c-.2-.4-.1-.9.3-1.2l1.5-1.2a8 8 0 0 1 0-2l-1.5-1.2c-.4-.3-.5-.8-.3-1.2l1.6-2.8c.3-.4.7-.6 1.1-.4l1.8.7a8 8 0 0 1 1.7-1l.4-1.9c0-.5.3-.8.8-.8h3.2c.5 0 .9.3.9.8l.3 1.9a8 8 0 0 1 1.7 1l1.8-.7c.4-.2.9 0 1.1.4l1.6 2.8c.2.4.1.9-.3 1.2l-1.5 1.2a8 8 0 0 1 0 2z"/></svg></button>
+    </header>
+    <main id="list" aria-live="polite"></main>
+    <div id="more" hidden><button id="btnMore" class="soft">Show more</button></div>
+    <nav class="bottombar" aria-label="Search and filters">
+      <div class="filters" id="chips" role="tablist"></div>
+      <div class="searchwrap">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="#8E8E93" stroke-width="1.8"/><path d="m16 16 4.5 4.5" stroke="#8E8E93" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <input id="q" type="search" placeholder="Search titles, references, URLs" aria-label="Search saved items" style="font-size:16px"/>
+      </div>
+    </nav>
+  </div>
+
+  <div id="viewSet" hidden>
+    <header>
+      <button id="btnBack" class="back" aria-label="Back to library"><svg viewBox="0 0 24 24"><path d="M15 4.5 7.5 12 15 19.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <h1>Settings</h1>
+    </header>
+    <main id="setMain">
+      <section>
+        <h2>Capture — show the bubble for</h2>
+        <div id="srcToggles"></div>
+        <p class="note">Turning a category off hides the bubble on those pages.</p>
+      </section>
+      <section>
+        <h2>Gemini (free model)</h2>
+        <label class="fld">API key <input id="gemKey" type="password" placeholder="AIza…" autocomplete="off"/></label>
+        <label class="fld">Model <input id="gemModel" placeholder="gemini-2.0-flash"/></label>
+        <label class="row2"><input id="gemOn" type="checkbox"/><span>Auto-tag + one-line summary on save</span></label>
+        <p class="note">Key stays on this device. Saves work fine without it.</p>
+      </section>
+      <section>
+        <h2>Sync (laptop ↔ phone)</h2>
+        <label class="lst" for="fbCfg">Firebase web config (one JSON blob)</label>
+        <textarea id="fbCfg" rows="5" spellcheck="false" placeholder='{"apiKey":"…","authDomain":"…","databaseURL":"https://…firebaseio.com","projectId":"…",…}'></textarea>
+        <label class="fld">Sync code (passphrase — both devices must match) <input id="syncCode" type="password" autocomplete="off"/></label>
+        <label class="row2"><input id="syncOn" type="checkbox"/><span>Sync on</span></label>
+        <div class="rowbtn"><button id="btnSyncSave" class="p">Save sync settings</button><button id="btnExport" class="soft">Export JSON</button><label class="soft imp">Import JSON<input id="fileImport" type="file" accept="application/json" hidden/></label></div>
+        <p class="note">Data is AES-GCM encrypted with your sync code before upload — nothing readable leaves the device. RTDB usage rules you paste in Firebase console → Realtime Database → Rules:</p>
+        <pre id="rules" class="code">{
+  "rules": {
+    "omnisave": { "$code": { ".read": true, ".write": true } }
+  }
+}</pre>
+      </section>
+      <section>
+        <h2>Data</h2>
+        <p id="storeRow" class="note">Calculating…</p>
+        <div class="rowbtn"><button id="btnWipe" class="danger">Erase all saved items</button></div>
+      </section>
+    </main>
+  </div>
+  <script src="../lib/db.js"></script>
+  <script src="library.js"></script>
+</body>
+</html>

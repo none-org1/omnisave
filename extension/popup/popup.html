@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Omnisave</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; font-family: -apple-system, 'SF Pro Text', 'Segoe UI', system-ui, sans-serif; }
+    body { width: 320px; background: #F5F5F7; color: #1C1C1E; padding: 14px; }
+    header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+    .logo { width: 20px; height: 20px; border-radius: 6px; background: #0A84FF; display: grid; place-items: center; }
+    .logo svg { width: 11px; height: 11px; }
+    h1 { font-size: 15px; font-weight: 700; letter-spacing: .2px; flex: 1; }
+    .hint { font-size: 11px; color: #8E8E93; line-height: 1.4; margin-bottom: 12px; }
+    .card { background: rgba(255,255,255,.85); border: .5px solid rgba(120,120,128,.32); border-radius: 14px; overflow: hidden; }
+    .item { padding: 10px 12px; border-bottom: .5px solid rgba(120,120,128,.22); display: flex; gap: 10px; align-items: flex-start; }
+    .item:last-child { border-bottom: none; }
+    .chip { flex: none; margin-top: 2px; font-size: 9.5px; font-weight: 700; letter-spacing: .3px; text-transform: uppercase;
+            padding: 3px 7px; border-radius: 99px; background: rgba(10,132,255,.14); color: #0A6CD8; }
+    .tx { min-width: 0; }
+    .t { font-size: 12.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .r { font-size: 11.5px; color: #3A3A3C; margin-top: 2px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+    .m { font-size: 10px; color: #8E8E93; margin-top: 2px; }
+    .empty { padding: 14px 12px; font-size: 12px; color: #8E8E93; text-align: center; }
+    footer { margin-top: 12px; font-size: 10.5px; color: #8E8E93; text-align: center; line-height: 1.5; }
+  </style>
+</head>
+<body>
+  <header>
+    <span class="logo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 3.5h10a1 1 0 0 1 1 1v15.2a.7.7 0 0 1-1.1.6L12 16.6l-4.9 3.7A.7.7 0 0 1 6 19.7V4.5a1 1 0 0 1 1-1z" fill="#fff"/></svg></span>
+    <h1>Omnisave</h1>
+    <span id="count" class="hint" style="margin:0"></span>
+  </header>
+  <p class="hint">Saved items below. The bubble on any page auto-captures the URL — you only write the reference.</p>
+  <div class="card" id="list" aria-live="polite"><div class="empty">Loading…</div></div>
+  <footer><a href="../library/library.html" target="_blank" style="color:#0A84FF;font-weight:600">Open library</a> — search + filters + settings<br/>Saved locally. Optional sync in settings.</footer>
+  <script src="popup.js"></script>
+</body>
+</html>

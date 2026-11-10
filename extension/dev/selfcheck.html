@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"/><title>Omnisave self-check</title></head>
+<body style="font-family:'Segoe UI',monospace;font-size:13px;background:#111;color:#0f0;padding:16px">
+  <h3 style="color:#fff">Omnisave DB self-check</h3>
+  <div id="log"></div>
+  <script src="../lib/db.js"></script>
+  <script>
+    const log = (s, ok) => {
+      document.getElementById('log').innerHTML += `<div style="color:${ok ? '#2fd32f' : '#f55'}">${ok ? 'PASS' : 'FAIL'} · ${s}</div>`;
+      if (!ok) window.__failed = true;
+    };
+    (async () => {
+      const fake = {
+        id: 'selfcheck-' + Date.now(), createdAt: Date.now(), type: 'website', platform: 'web',
+        url: 'https://example.com/selfcheck?utm_source=none', canonical: 'https://example.com/selfcheck',
+        title: 'Selfcheck', refText: 'test reference line', source: 'extension'
+      };
+      try {
+        await db.put(fake);
+        log('put(item)', true);
+        const c = await db.count();
+        log('count() = ' + c, c > 0);
+        const r = await db.recent(1);
+        log('recent(1) returns ' + r[0]?.id, r[0]?.id === fake.id);
+        const f = await db.findByCanonical(fake.canonical);
+        log('findByCanonical = ' + f.length, f.length === 1);
+        await db.remove(fake.id);
+        const c2 = await db.count();
+        log('remove + count back to ' + c2, c2 === c - 1);
+      } catch (e) {
+        log(String(e), false);
+      }
+    })();
+  </script>
+</body>
+</html>
